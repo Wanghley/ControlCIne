@@ -13,6 +13,9 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import java.awt.Color;
 import javax.swing.SwingConstants;
+
+import db.Conexao;
+
 import java.awt.Font;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
@@ -35,6 +38,7 @@ public class Login extends JFrame {
 				}
 			}
 		});
+		Conexao c = new Conexao();
 	}
 
 	/**
