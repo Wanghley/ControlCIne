@@ -1,5 +1,6 @@
 package db;
 
+import java.sql.Time;
 import java.util.Date;
 
 public class Filme {
@@ -27,8 +28,8 @@ public class Filme {
 		this.id = id;
 	}
 
-	public Date getDuracao() {
-		return duracao;
+	public Time getDuracao() {
+		return (Time)duracao;
 	}
 
 	public void setDuracao(Date duracao) {

@@ -4,31 +4,33 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 
-public class ClienteDAO {
+public class FilmeDAO {
 
 	// a conexão com o banco de dados
 	private Connection conexao;
 
-	public ClienteDAO() {
+	public FilmeDAO() {
 		Conexao con = new Conexao();
 		this.conexao = con.getConexao();
 	}
 
 	//MÉTODO PARA ADICIONAR NOVO CONTATO
-	public void add(Cliente cliente) {
+	public void add(Filme filme) {
 
-		String sql = "INSERT INTO CONTROLCINE.CLIENTE " +
-				"(ID,NOME)" +
-				" values (?,?)";
+		String sql = "INSERT INTO CONTROLCINE.FILME " +
+				"(ID,TITULO,DURACAO)" +
+				" values (?,?,?)";
 
 		try {
 			// prepared statement para inserção
 			PreparedStatement stmt = conexao.prepareStatement(sql);
 
 			// seta os valores
-			stmt.setInt(1,cliente.getId());
-			stmt.setString(2,cliente.getNome());
+			stmt.setInt(1, filme.getId());
+			stmt.setString(2,filme.getTitulo());
+			stmt.setTime(3, filme.getDuracao());
 
 			// executa
 			stmt.execute();
@@ -39,15 +41,16 @@ public class ClienteDAO {
 	}
 
 	//MÉTODO PARA ALTERAR CONTATO
-	public void update(Cliente cliente) {
-		System.out.println("ID: "+cliente.getId());
+	public void update(Filme filme) {
+		System.out.println("ID: "+filme.getId());
 
-		String sql = "UPDATE CONTROLCINE.CLIENTE SET NOME=? " +
+		String sql = "UPDATE CONTROLCINE.FILME SET TITULO=?, DURACAO=? " +
 				"WHERE ID=?";
 		try {
 			PreparedStatement stmt = conexao.prepareStatement(sql);
-			stmt.setString(1, cliente.getNome());
-			stmt.setInt(2, cliente.getId());
+			stmt.setString(1, filme.getTitulo());
+			stmt.setInt(2, filme.getId());
+			stmt.setTime(3, filme.getDuracao());
 
 			System.out.println(stmt);
 
@@ -62,7 +65,7 @@ public class ClienteDAO {
 	public void remove(Cliente cliente) {
 		try {
 			PreparedStatement stmt = conexao.prepareStatement("delete " +
-					"from CONTROLCINE.CLIENTE where ID=?");
+					"from CONTROLCINE.FILME where ID=?");
 			stmt.setInt(1, cliente.getId());
 			stmt.execute();
 			stmt.close();
@@ -73,13 +76,14 @@ public class ClienteDAO {
 
 	//MÉTODO PARA EXIBIR TODOS
 	public void showAll() {
-		String sql = "select * from CONTROLCINE.CLIENTE";
+		String sql = "select * from CONTROLCINE.FILME";
 		try {
 			PreparedStatement stmt = conexao.prepareStatement(sql);
 			ResultSet resultado = stmt.executeQuery(); //executa uma consulta
 			while(resultado.next()) {
-				System.out.println(resultado.getString("ID ")
-						+" "+resultado.getString("NOME"));
+				System.out.println(resultado.getString("ID")
+						+" "+resultado.getString("TITULO")
+						+" "+resultado.getTime("DURACAO"));
 			}
 		} catch (SQLException ex) {
 			ex.printStackTrace();
@@ -90,7 +94,7 @@ public class ClienteDAO {
 	//MÉTODO PARA BUSCAR POR NOME
 	public ResultSet searchCinemaByName(String nome) {
 
-		String sql = "select * from CONTROLCINE.CINEMA where NOME like ?";
+		String sql = "select * from CONTROLCINE.FILME where NOME like ?";
 
 		try {
 			PreparedStatement stmt = conexao.prepareStatement(sql);
