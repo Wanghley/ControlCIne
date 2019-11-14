@@ -1,0 +1,13 @@
+Um cinema pode ter muitas salas, sendo necessário, portanto, registrar informações a respeito de cada uma,como sua capacidade, ou seja, 
+o número de assentos disponíveis.
+Cada sala possui no máximo 5 sessões .O cinema apresenta muitos filmes. Um filme tem informações como título e duração.
+Assim, sempre que um filme for ser apresentado, deve-se registrá-lo também.Um mesmo filme pode ser apresentado 
+em diferentes salas e em horários diferentes.
+Cada apresentação em uma determinada data e horário é chamada Sessão. Uma sessão pode ser do tipo normal ou 3D.
+O valor do ingresso das sessões 3D não possuem desconto para estudante.Um filme sendo apresentando em uma sessão 
+tem um conjunto de ingressos, 
+determinado pela capacidade da sala.
+Os clientes do cinema podem comprar ou não ingressos para assistir uma sessão. O funcionário deveintermediar a compra do ingresso. 
+Um ingresso deve apresentar toda informação da sessão, bem como o seu valor, que varia de acordo o tipo de sessão (3D ou Normal) 
+e com o tipo (inteiro ou meio ingresso). 
+Além disso,um cliente só pode comprar ingressos para sessões ainda não encerradas.
