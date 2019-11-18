@@ -66,7 +66,29 @@ public class SessaoDAO {
 		}
 		return null;
 	}
-
+	
+	public List<Sessao> getAllBasedOnFilmeID(int idFilme) {
+		List<Sessao> data = new ArrayList<Sessao>();
+		Sessao tmpSessao = null;
+		String sql = "select * from CONTROLCINE.SESSAO WHERE IDFILME="+idFilme;
+		try {
+			PreparedStatement stmt = conexao.prepareStatement(sql);
+			ResultSet resultado = stmt.executeQuery(); //executa uma consulta
+			while(resultado.next()) {
+				tmpSessao = new Sessao(resultado.getInt("ID"),
+						resultado.getTime("HORARIO"), 
+						resultado.getDate("DATA"), resultado.getBoolean("ESPECIAL"),
+						resultado.getFloat("PRECOINGRESSO"), resultado.getInt("IDFILME"),
+						resultado.getInt("ASSENTOSDISPONIVEIS"));
+				data.add(tmpSessao);
+			}
+			return data;
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		}
+		return null;
+	}
+	
 	//MÉTODO PARA BUSCAR QUALQUER CONSULTA
 	public ResultSet consult(String sql) {
 

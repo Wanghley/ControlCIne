@@ -13,6 +13,7 @@ import java.sql.ResultSet;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 
 import model.FilmeDAO;
@@ -39,7 +40,8 @@ public class VendaIngresso extends JFrame {
 	 * Create the frame.
 	 */
 	public VendaIngresso(Funcionario func) {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		
 		setBounds(100, 100, 740, 440);
 		BufferedImage myImage;
 		try {
@@ -57,18 +59,13 @@ public class VendaIngresso extends JFrame {
 			
 			JButton btnFilme = new JButton("FILME");
 			btnGroupOptions.add(btnFilme);
-			btnFilme.setBounds(53, 80, 114, 25);
+			btnFilme.setBounds(140, 80, 114, 25);
 			imagePanel.add(btnFilme);
 			
 			JButton btnSesso = new JButton("SESSÃO");
 			btnGroupOptions.add(btnSesso);
-			btnSesso.setBounds(304, 80, 114, 25);
+			btnSesso.setBounds(487, 80, 114, 25);
 			imagePanel.add(btnSesso);
-			
-			JButton btnSala = new JButton("SALA");
-			btnGroupOptions.add(btnSala);
-			btnSala.setBounds(558, 80, 114, 25);
-			imagePanel.add(btnSala);
 			
 			JScrollPane scrollPane = new JScrollPane();
 			scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -84,14 +81,28 @@ public class VendaIngresso extends JFrame {
 			btnConfirma.setBorderPainted(false);
 			btnConfirma.setContentAreaFilled(false);
 			btnConfirma.setIcon(new ImageIcon(VendaIngresso.class.getResource("/img/confirm_btn.png")));
-			btnConfirma.setBounds(255, 357, 200, 48);
+			btnConfirma.setBounds(436, 365, 200, 48);
 			imagePanel.add(btnConfirma);
+			
+			JButton btnCancelar = new JButton("Cancelar");
+			btnCancelar.setOpaque(false);
+			btnCancelar.setContentAreaFilled(false);
+			btnCancelar.setBorderPainted(true);
+			btnCancelar.setBounds(89, 365, 200, 48);
+			btnCancelar.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					dispose();
+					new Login(null).setVisible(true);
+				}
+			});
+			imagePanel.add(btnCancelar);
 			
 			btnFilme.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					btnFilme.setEnabled(false);
-					btnSala.setEnabled(true);
 					btnSesso.setEnabled(true);
 					
 					FilmeDAO filmes = new FilmeDAO();
@@ -106,7 +117,6 @@ public class VendaIngresso extends JFrame {
 				public void actionPerformed(ActionEvent arg0) {
 					btnSesso.setEnabled(false);
 					btnFilme.setEnabled(true);
-					btnSala.setEnabled(true);
 					
 					SessaoDAO sessao = new SessaoDAO();
 					SessaoTableModel sessaoTM = new SessaoTableModel();
@@ -114,12 +124,23 @@ public class VendaIngresso extends JFrame {
 					tableView.setModel(sessaoTM);
 				}
 			});
-			btnSala.addActionListener(new ActionListener() {
+			
+			btnConfirma.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					btnSala.setEnabled(false);
-					btnFilme.setEnabled(true);
-					btnSesso.setEnabled(true);
+					if(tableView.getSelectionModel().isSelectionEmpty()) {
+						JOptionPane.showMessageDialog(rootPane, "Selecione pelo menos um filme/sessão!",
+								"ERRO", JOptionPane.ERROR_MESSAGE);
+					}else {
+						if(!btnFilme.isEnabled()) {
+							int id = (int) tableView.getValueAt(tableView.getSelectedRowCount()-1, 0);
+							SessaoTableModel stm = new SessaoTableModel();
+							SessaoDAO sdao = new SessaoDAO();
+							stm.addObject(sdao.getAllBasedOnFilmeID(id));
+							JOptionPane.showMessageDialog(rootPane, "Selecione uma das sessões\npara o referido filme!", "SELECIONE UMA SESSÃO", JOptionPane.INFORMATION_MESSAGE);
+							tableView.setModel(stm);
+						}
+					}
 				}
 			});
 			

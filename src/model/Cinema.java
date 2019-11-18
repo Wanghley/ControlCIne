@@ -19,6 +19,9 @@ public class Cinema {
 		this.CNPJ = CNPJ;
 		this.franquia = franquia;
 	}
+	public Cinema(String CNPJ) {
+		this.CNPJ=CNPJ;
+	}
 
 	public String getCNPJ() {
 		return CNPJ;

@@ -1,6 +1,9 @@
 package model;
 
-public class Sala {
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class Sala extends Cinema{
 
 	private int id;
 	private int capacidade;
@@ -9,10 +12,19 @@ public class Sala {
 
 	
 
-	public Sala(int id, int capacidade) {
-		super();
+	public Sala(int id, int capacidade,String CNPJ) {
+		super(CNPJ);
 		this.id=id;
 		this.capacidade=capacidade;
+		CinemaDAO cinemaDAO = new CinemaDAO();
+		ResultSet r = cinemaDAO.consult("SELECT * FROM CONTROLCINE.CINEMA WHERE CNPJ="+super.getCNPJ());
+		try {
+			super.setFranquia(r.getString("FRANQUIA"));
+			super.setNome(r.getString("NOME"));
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public int getId() {
