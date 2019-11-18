@@ -1,5 +1,8 @@
 package model;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class Cinema {
 
 	private String CNPJ;
@@ -21,6 +24,15 @@ public class Cinema {
 	}
 	public Cinema(String CNPJ) {
 		this.CNPJ=CNPJ;
+		CinemaDAO cinemaDAO = new CinemaDAO();
+		ResultSet r = cinemaDAO.consult("SELECT * FROM CONTROLCINE.CINEMA WHERE CNPJ="+CNPJ);
+		try {
+			this.franquia=r.getString("FRANQUIA");
+			this.nome=r.getString("NOME");
+		} catch (SQLException e) {
+			System.err.println("ERRO no cinema");
+			e.printStackTrace();
+		}
 	}
 
 	public String getCNPJ() {

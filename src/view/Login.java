@@ -113,6 +113,35 @@ public class Login extends JFrame {
 			btnCadastro.setIcon(new ImageIcon(Login.class.getResource("/img/admin_btn.png")));
 			btnCadastro.setBackground(Color.LIGHT_GRAY);
 			btnCadastro.setBounds(397, 236, 199, 45);
+			btnCadastro.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					LoginDialog ld = new LoginDialog(userPswd);
+					ld.setVisible(true);
+					FuncionarioDAO f = new FuncionarioDAO();
+					ResultSet func = f.getFuncionarioPerCPF(userPswd.getCPF());
+					Funcionario funcio = null;
+					try {
+						if(func.next()) {
+							funcio = new Funcionario(func.getString("ID"), 
+									func.getString("NOME"), 
+									func.getBoolean("ADMIN"), func.getString("SENHA"));
+						}
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					if(funcio.isAdmin()) {
+						dispose();
+						AdminPanel ap = new AdminPanel();
+						ap.setVisible(true);
+					}else {
+						JOptionPane.showMessageDialog(rootPane, "ERRO! Você não tem permissão de administrador!",
+								"ERRO", JOptionPane.WARNING_MESSAGE);
+					}
+				}
+			});
 			imagePanel.add(btnCadastro);
 		} catch (IOException e) {
 			System.err.println("ERROR! Background of Login not found!");
