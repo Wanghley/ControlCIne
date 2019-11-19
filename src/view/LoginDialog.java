@@ -61,6 +61,7 @@ public class LoginDialog extends JDialog {
 			try {
 				msk = new MaskFormatter("###.###.###-##");
 				ftxtCPF = new JFormattedTextField(msk);
+				
 			} catch (ParseException e) {
 				JOptionPane.showMessageDialog(rootPane, "ERRO! Valor inválido!\nFormato: 000.111.222-33",
 						"ERRO", JOptionPane.ERROR_MESSAGE);
@@ -96,8 +97,8 @@ public class LoginDialog extends JDialog {
 							JOptionPane.showMessageDialog(rootPane, "Senha não pode estar vazia!","ERRO",JOptionPane.WARNING_MESSAGE);
 						}
 						
-						data.CPF = ftxtCPF.getText();
-						data.pswd = pswd.getPassword();
+						data.setCPF(ftxtCPF.getText());
+						data.setPassword(pswd.getPassword());
 						
 						dispose();
 					}
@@ -111,8 +112,8 @@ public class LoginDialog extends JDialog {
 					
 					@Override
 					public void actionPerformed(ActionEvent arg0) {	
-						data.CPF=null;
-						data.pswd=null;
+						data.setCPF(null);
+						data.setPassword(null);
 						dispose();
 					}
 				});
@@ -120,5 +121,7 @@ public class LoginDialog extends JDialog {
 			}
 		}
 		setLocationRelativeTo(null);
-	}	
+	}
+	
+		
 }

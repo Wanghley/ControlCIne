@@ -34,9 +34,8 @@ import javax.swing.ImageIcon;
 
 public class Login extends JFrame {
 
-	private Point locked=null;
 	private static UserData userPswd = new UserData();
-
+	private Funcionario f;
 	/**
 	 * Create the frame.
 	 */
@@ -66,45 +65,7 @@ public class Login extends JFrame {
 			btnLogin.setIcon(new ImageIcon(Login.class.getResource("/img/login_btn2.png")));
 			btnLogin.setBounds(139, 236, 199, 47);
 			btnLogin.setPressedIcon(new ImageIcon(Login.class.getResource("/img/login_btn2_clicked.png")));
-			btnLogin.addActionListener(new ActionListener() {
-
-				@Override
-				public void actionPerformed(ActionEvent arg0) {
-					LoginDialog ld = new LoginDialog(userPswd);
-					ld.setVisible(true);
-					//TO DO conect to DB and verify
-					FuncionarioDAO func = new FuncionarioDAO();
-					ResultSet r = func.getFuncionarioPerCPF(userPswd.getCPF());
-					func.encerrar();
-					try {
-						if(!r.next()) {
-							JOptionPane.showMessageDialog(rootPane, "Usuário não cadastrado!", "USER NOT FOUND", JOptionPane.ERROR_MESSAGE);
-						}else {
-							Funcionario f=null;
-							try {
-								f = new Funcionario(r.getString("ID"), 
-										r.getString("NOME"),
-										r.getBoolean("ADMIN"),
-										r.getString("SENHA"));
-								if(!userPswd.getPassword().equals(f.getPswd())){
-									JOptionPane.showMessageDialog(rootPane, "Senha Incorreta!", "WRONG PASSWORD", JOptionPane.WARNING_MESSAGE);
-								}else {
-									dispose();
-									VendaIngresso vi= new VendaIngresso(f);
-									vi.setVisible(true);
-								}
-							} catch (SQLException e) {
-								System.err.println("SQLException on getting information of Funcionario");
-							}
-						}
-					} catch (HeadlessException | SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-			});
 			imagePanel.add(btnLogin);
-
 			JButton btnCadastro = new JButton("");
 			btnCadastro.setOpaque(false);
 			btnCadastro.setContentAreaFilled(false);
@@ -113,64 +74,92 @@ public class Login extends JFrame {
 			btnCadastro.setIcon(new ImageIcon(Login.class.getResource("/img/admin_btn.png")));
 			btnCadastro.setBackground(Color.LIGHT_GRAY);
 			btnCadastro.setBounds(397, 236, 199, 45);
-			btnCadastro.addActionListener(new ActionListener() {
-				
+			imagePanel.add(btnCadastro);
+
+			btnLogin.addActionListener(new ActionListener() {
+
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					LoginDialog ld = new LoginDialog(userPswd);
-					ld.setVisible(true);
-					FuncionarioDAO f = new FuncionarioDAO();
-					ResultSet func = f.getFuncionarioPerCPF(userPswd.getCPF());
-					Funcionario funcio = null;
-					try {
-						if(func.next()) {
-							funcio = new Funcionario(func.getString("ID"), 
-									func.getString("NOME"), 
-									func.getBoolean("ADMIN"), func.getString("SENHA"));
-						}
-					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					if(funcio.isAdmin()) {
+					boolean sucessful = Login();
+					if(sucessful) {
 						dispose();
-						AdminPanel ap = new AdminPanel();
-						ap.setVisible(true);
-					}else {
-						JOptionPane.showMessageDialog(rootPane, "ERRO! Você não tem permissão de administrador!",
-								"ERRO", JOptionPane.WARNING_MESSAGE);
+						VendaIngresso vi = new VendaIngresso(f);
+						vi.setVisible(true);
 					}
 				}
 			});
-			imagePanel.add(btnCadastro);
+
+			btnCadastro.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					boolean sucessful = Login();
+					if(sucessful) {
+						if(f.isAdmin()) {
+							if(f.getPswd().equals(userPswd.getPassword())) {
+								dispose();
+								AdminPanel ap = new AdminPanel();
+								ap.setVisible(true);
+							}else {
+								JOptionPane.showMessageDialog(rootPane, "ERRO! Senha Incorreta!",
+										"WRONG PASSWORD", JOptionPane.WARNING_MESSAGE);
+								LoginDialog ld1 = new LoginDialog(userPswd);
+								ld1.setVisible(true);
+							}
+						}else {
+							JOptionPane.showMessageDialog(rootPane, "ERRO! Você não tem permissão de administrador!",
+									"ERRO", JOptionPane.WARNING_MESSAGE);
+						}
+					}
+				}
+			});
+
 		} catch (IOException e) {
 			System.err.println("ERROR! Background of Login not found!");
 		}
+
 		setLocationRelativeTo(null);
 		setTitle("ControlCine System");
 		setResizable(false);
-
-		//Lock drag of jframe
-		super.addComponentListener(new ComponentAdapter(){
-			public void componentMoved(ComponentEvent e) {
-				if (locked!=null) setLocation(locked);
-			}});
+	}
+	private boolean Login() {
+		boolean res = false;
+		LoginDialog ld = new LoginDialog(userPswd);
+		ld.setVisible(true);
+		FuncionarioDAO func = new FuncionarioDAO();
+		ResultSet r = func.getFuncionarioPerCPF(userPswd.getCPF());
+		func.encerrar();
+		try {
+			if(!r.next()) {
+				JOptionPane.showMessageDialog(rootPane, "Usuário não cadastrado!", "USER NOT FOUND", JOptionPane.ERROR_MESSAGE);
+			}else {
+				try {
+					f = new Funcionario(r.getString("ID"), 
+							r.getString("NOME"),
+							r.getBoolean("ADMIN"),
+							r.getString("SENHA"));
+					if(!userPswd.getPassword().equals(f.getPswd())){
+						JOptionPane.showMessageDialog(rootPane, "Senha Incorreta!", "WRONG PASSWORD", JOptionPane.WARNING_MESSAGE);
+					}else {
+						res=true;
+					}
+				} catch (SQLException e) {
+					System.err.println("SQLException on getting information of Funcionario");
+				}
+			}
+		} catch (HeadlessException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return res;
 	}
 
-	public void lockLocation() {
-		locked=getLocation();
-	}
-
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 					Login frame = new Login(userPswd);
 					frame.setVisible(true);
-					frame.lockLocation();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

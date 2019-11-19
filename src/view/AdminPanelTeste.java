@@ -66,6 +66,7 @@ public class AdminPanelTeste extends JFrame {
 			panel.setLayout(null);
 			
 			JLabel lblSelecioneOQue = new JLabel("Salas");
+			lblSelecioneOQue.setForeground(Color.WHITE);
 			lblSelecioneOQue.setHorizontalAlignment(SwingConstants.CENTER);
 			lblSelecioneOQue.setBounds(200, 12, 278, 15);
 			panel.add(lblSelecioneOQue);
