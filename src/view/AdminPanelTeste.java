@@ -72,15 +72,15 @@ public class AdminPanelTeste extends JFrame {
 			panel.add(lblSelecioneOQue);
 			
 			JButton btnAdd = new JButton("ADICIONAR");
-			btnAdd.setBounds(57, 314, 121, 25);
+			btnAdd.setBounds(200, 314, 121, 25);
 			panel.add(btnAdd);
 			
 			JButton btnEdit = new JButton("EDITAR");
-			btnEdit.setBounds(276, 314, 114, 25);
+			btnEdit.setBounds(358, 314, 114, 25);
 			panel.add(btnEdit);
 			
 			JButton btnRemover = new JButton("REMOVER");
-			btnRemover.setBounds(488, 314, 114, 25);
+			btnRemover.setBounds(515, 314, 114, 25);
 			panel.add(btnRemover);
 			
 			JScrollPane scrollPane = new JScrollPane();
@@ -89,6 +89,10 @@ public class AdminPanelTeste extends JFrame {
 			
 			table = new JTable();
 			scrollPane.setViewportView(table);
+			
+			JButton btnVoltar = new JButton("VOLTAR");
+			btnVoltar.setBounds(43, 314, 114, 25);
+			panel.add(btnVoltar);
 		} catch (IOException e) {
 			System.err.println("ERROR! Background of Login not found!");
 		}

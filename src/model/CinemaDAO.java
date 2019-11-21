@@ -108,6 +108,23 @@ public class CinemaDAO {
 
 		return null;
 	}
+	
+	public ResultSet getCinemaByCNPJ(String CNPJ) {
+
+		String sql = "SELECT * FROM CONTROLCINE.CINEMA WHERE CNPJ=?";
+
+		try {
+			PreparedStatement stmt = conexao.prepareStatement(sql);
+			stmt.setString(1,CNPJ);
+
+			ResultSet resultado = stmt.executeQuery(); //executa uma consulta
+			return resultado;
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		}
+
+		return null;
+	}
 
 
 	//MÉTODO PARA BUSCAR QUALQUER CONSULTA

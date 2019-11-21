@@ -21,7 +21,7 @@ public class SalaDAO {
 	public List<Sala> getAllData() {
 		List<Sala> data = new ArrayList<Sala>();
 		Sala tmpSala = null;
-		String sql = "select * from CONTROLCINE.SALA";
+		String sql = "SELECT * FROM CONTROLCINE.SALA";
 		try {
 			PreparedStatement stmt = conexao.prepareStatement(sql);
 			ResultSet resultado = stmt.executeQuery(); //executa uma consulta

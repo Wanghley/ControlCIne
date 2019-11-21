@@ -3,6 +3,8 @@ package model;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.swing.JOptionPane;
+
 public class Cinema {
 
 	private String CNPJ;
@@ -23,14 +25,24 @@ public class Cinema {
 		this.franquia = franquia;
 	}
 	public Cinema(String CNPJ) {
-		this.CNPJ=CNPJ;
+		setCNPJ(CNPJ);
 		CinemaDAO cinemaDAO = new CinemaDAO();
-		ResultSet r = cinemaDAO.consult("SELECT * FROM CONTROLCINE.CINEMA WHERE CNPJ="+CNPJ);
+		ResultSet r = cinemaDAO.getCinemaByCNPJ(CNPJ);
+		cinemaDAO.encerrar();
 		try {
-			this.franquia=r.getString("FRANQUIA");
-			this.nome=r.getString("NOME");
+			if(r.next()) {
+				System.out.println(r.getString("CNPJ"));
+				this.CNPJ=r.getString("CNPJ");
+				this.franquia=r.getString("FRANQUIA");
+				this.nome=r.getString("NOME");
+			}else {
+				JOptionPane.showMessageDialog(null, "Sem resultados!", "NOT RESULT", 0);
+				this.CNPJ=null;
+				this.franquia=null;
+				this.nome=null;
+			}
 		} catch (SQLException e) {
-			System.err.println("ERRO no cinema");
+			System.err.println("ERRO no cinema!");
 			e.printStackTrace();
 		}
 	}

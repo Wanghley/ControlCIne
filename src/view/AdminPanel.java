@@ -25,7 +25,6 @@ import javax.swing.JButton;
 
 public class AdminPanel extends JFrame {
 
-	private Point locked=null;
 	private static UserData userPswd = new UserData();
 
 	/**
@@ -84,6 +83,18 @@ public class AdminPanel extends JFrame {
 		JButton btnIngressos = new JButton("INGRESSOS");
 		btnIngressos.setBounds(480, 167, 114, 25);
 		panel.add(btnIngressos);
+		
+		JButton btnSairDoSistema = new JButton("SAIR DO SISTEMA");
+		btnSairDoSistema.setBounds(242, 303, 181, 25);
+		btnSairDoSistema.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				dispose();
+				new Login(null).setVisible(true);
+			}
+		});
+		panel.add(btnSairDoSistema);
 
 		setLocationRelativeTo(null);
 		setTitle("ControlCine System");
@@ -107,28 +118,43 @@ public class AdminPanel extends JFrame {
 		panel.add(lblSelecioneOQue);
 
 		JButton btnAdd = new JButton("ADICIONAR");
-		btnAdd.setBounds(57, 314, 121, 25);
+		btnAdd.setBounds(200, 314, 121, 25);
 		panel.add(btnAdd);
-
+		
 		JButton btnEdit = new JButton("EDITAR");
-		btnEdit.setBounds(276, 314, 114, 25);
+		btnEdit.setBounds(358, 314, 114, 25);
 		panel.add(btnEdit);
-
+		
 		JButton btnRemover = new JButton("REMOVER");
-		btnRemover.setBounds(488, 314, 114, 25);
+		btnRemover.setBounds(515, 314, 114, 25);
 		panel.add(btnRemover);
-
+		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(39, 39, 602, 191);
 		panel.add(scrollPane);
+		
+		JButton btnVoltar = new JButton("VOLTAR");
+		btnVoltar.setBounds(43, 314, 114, 25);
+		btnVoltar.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				dispose();
+				new AdminPanel().setVisible(true);
+				
+			}
+		});
+		panel.add(btnVoltar);
 
 		JTable table = new JTable();
 		SalaDAO sala = new SalaDAO();
 		SalaTableModel stm = new SalaTableModel();
 		stm.addObject(sala.getAllData());
+		sala.encerrar();
 		table.setModel(stm);
 		scrollPane.setViewportView(table);
-
+		
+		panel.setOpaque(false);
 		panel.repaint();
 		repaint();
 	}
