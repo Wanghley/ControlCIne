@@ -35,7 +35,26 @@ public class SalaDAO {
 		}
 		return null;
 	}
+	
+	public void update(Sala sala) {
+		System.out.println("ID: "+sala.getId());
 
+		String sql = "UPDATE CONTROLCINE.SALA SET CAPACIDADE=?,CNPJ=? " +
+				"WHERE ID=?";
+		try {
+			PreparedStatement stmt = conexao.prepareStatement(sql);
+			stmt.setInt(1, sala.getCapacidade());
+			stmt.setString(2, sala.getCNPJ());
+			stmt.setInt(3,sala.getId());
+			
+			System.out.println(stmt);
+
+			stmt.execute();
+			stmt.close();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 	//MÉTODO PARA BUSCAR QUALQUER CONSULTA
 	public ResultSet consult(String sql) {

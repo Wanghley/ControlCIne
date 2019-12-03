@@ -31,7 +31,6 @@ public class Cinema {
 		cinemaDAO.encerrar();
 		try {
 			if(r.next()) {
-				System.out.println(r.getString("CNPJ"));
 				this.CNPJ=r.getString("CNPJ");
 				this.franquia=r.getString("FRANQUIA");
 				this.nome=r.getString("NOME");

@@ -2,26 +2,31 @@ package model;
 
 public class Cliente {
 
-	private int id;
+	private String cpf;
 	private String nome;
 
 	// métodos get e set para id, nome, email, endereço e dataNascimento
 
 	
 
-	public Cliente(int id, String nome) {
-		super();
-		this.id=id;
+	public Cliente(String cpf, String nome) {
+		this.cpf=cpf;
 		this.nome=nome;
 	}
 
-	public int getId() {
-		return id;
+	
+
+	public String getCpf() {
+		return cpf;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+
+
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
 	}
+
+
 
 	public String getNome() {
 		return nome;
@@ -33,7 +38,7 @@ public class Cliente {
 
 	@Override
 	public String toString() {
-		return "Cliente [id=" + id + ", nome=" + nome + "]";
+		return "Cliente [id=" + cpf + ", nome=" + nome + "]";
 	}
 	
 }

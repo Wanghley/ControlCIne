@@ -1,11 +1,13 @@
 package model;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.util.Date;
 
-public class Sessao extends Filme{
+public class Sessao{
 
 	private int idSessao;
 	private Time horario;
@@ -13,26 +15,36 @@ public class Sessao extends Filme{
 	private boolean is3D;
 	private int assentos;
 	private float preco;
-	private FilmeDAO fDAO=new FilmeDAO();
+	private Filme filme;
+	private Sala sala;
+	private Connection conexao;
 
 	// métodos get e set para id, nome, email, endereço e dataNascimento
 
-	
 
-	public Sessao(int id,Time horario, Date data,boolean is3D,float preco, int idFilme, int assentosDiponiveis) {
-		super();
+
+	public Sessao(int id,Time horario, Date data,boolean is3D,float preco, int idFilme, int idSala,
+			int assentosdisponiveis) {
 		this.idSessao=id;
 		this.data=data;
 		this.horario=horario;
 		this.is3D=is3D;
 		this.preco=preco;
-		this.assentos=assentosDiponiveis;
-		super.setId(idFilme);
-		ResultSet FilmeData = fDAO.consult("SELECT TITULO FROM CONTROLCINE.FILME WHERE ID="+super.getId());
+		System.out.println(idFilme);
+		ResultSet FilmeData = null;
+		String sql = "SELECT * FROM CONTROLCINE.FILME WHERE ID=?";
+		Conexao c = new Conexao();
+		this.conexao=c.getConexao();
 		try {
-			super.setTitulo(FilmeData.getString("TITULO"));
-			super.setDuracao(FilmeData.getTime("DURACAO"));
-			super.setCapa(FilmeData.getBytes("CAPA"));
+			PreparedStatement stmt = conexao.prepareStatement(sql);
+			stmt.setInt(1, idFilme);
+			FilmeData = stmt.executeQuery();
+			if (FilmeData.next()) {
+				filme = new Filme(FilmeData.getInt("ID"), FilmeData.getString("TITULO"), 
+						FilmeData.getTime("DURACAO"), null);
+			}
+			stmt.close();
+			conexao.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -54,7 +66,7 @@ public class Sessao extends Filme{
 		this.idSessao = id;
 	}
 
-	
+
 
 	public Time getHorario() {
 		return horario;
@@ -90,11 +102,10 @@ public class Sessao extends Filme{
 
 	@Override
 	public String toString() {
-		return "Sessao [idSessao=" + idSessao + ", horario=" + horario + ", data=" + data + ", is3D=" + is3D
-				+ ", assentos=" + assentos + ", preco=" + preco + ", fDAO=" + fDAO + "]";
+		return "ID: " + idSessao + " - "+filme.getTitulo()+" - " + horario + " " + data;
 	}
 
-	
-	
-	
+
+
+
 }

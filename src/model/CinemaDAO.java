@@ -51,7 +51,7 @@ public class CinemaDAO {
 			stmt.setString(2, cinema.getFranquia());
 			stmt.setString(3, cinema.getCNPJ());
 
-			System.out.println(stmt);
+			//System.out.println(stmt);
 
 			stmt.execute();
 			stmt.close();

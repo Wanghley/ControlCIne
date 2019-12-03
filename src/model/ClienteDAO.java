@@ -19,7 +19,7 @@ public class ClienteDAO {
 	public void add(Cliente cliente) {
 
 		String sql = "INSERT INTO CONTROLCINE.CLIENTE " +
-				"(ID,NOME)" +
+				"(CPF,NOME)" +
 				" values (?,?)";
 
 		try {
@@ -27,7 +27,7 @@ public class ClienteDAO {
 			PreparedStatement stmt = conexao.prepareStatement(sql);
 
 			// seta os valores
-			stmt.setInt(1,cliente.getId());
+			stmt.setString(1,cliente.getCpf());
 			stmt.setString(2,cliente.getNome());
 
 			// executa
@@ -40,14 +40,12 @@ public class ClienteDAO {
 
 	//MÉTODO PARA ALTERAR CONTATO
 	public void update(Cliente cliente) {
-		System.out.println("ID: "+cliente.getId());
-
 		String sql = "UPDATE CONTROLCINE.CLIENTE SET NOME=? " +
-				"WHERE ID=?";
+				"WHERE CPF=?";
 		try {
 			PreparedStatement stmt = conexao.prepareStatement(sql);
 			stmt.setString(1, cliente.getNome());
-			stmt.setInt(2, cliente.getId());
+			stmt.setString(2, cliente.getCpf());
 
 			System.out.println(stmt);
 
@@ -62,8 +60,8 @@ public class ClienteDAO {
 	public void remove(Cliente cliente) {
 		try {
 			PreparedStatement stmt = conexao.prepareStatement("delete " +
-					"from CONTROLCINE.CLIENTE where ID=?");
-			stmt.setInt(1, cliente.getId());
+					"from CONTROLCINE.CLIENTE where CPF=?");
+			stmt.setString(1, cliente.getCpf());
 			stmt.execute();
 			stmt.close();
 		} catch (SQLException e) {
@@ -105,7 +103,28 @@ public class ClienteDAO {
 
 		return null;
 	}
+	
+	public Cliente getClienteByCPF(String cpf) {
 
+		String sql = "select * from CONTROLCINE.CLIENTE where cpf = ?";
+
+		try {
+			PreparedStatement stmt = conexao.prepareStatement(sql);
+			stmt.setString(1,cpf);
+
+			ResultSet resultado = stmt.executeQuery(); //executa uma consulta
+			Cliente c = null;
+			System.out.println(cpf);
+			if(resultado.next()) {
+				c = new Cliente(resultado.getString("CPF"), resultado.getString("Nome"));
+			}
+			return c;
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		}
+
+		return null;
+	}
 
 	//MÉTODO PARA BUSCAR QUALQUER CONSULTA
 	public ResultSet consult(String sql) {

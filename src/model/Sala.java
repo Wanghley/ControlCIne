@@ -11,7 +11,6 @@ public class Sala extends Cinema{
 
 	public Sala(int id, int capacidade,String CNPJ) {
 		super(CNPJ);
-		System.out.println(CNPJ);
 		this.id=id;
 		this.capacidade=capacidade;
 	}

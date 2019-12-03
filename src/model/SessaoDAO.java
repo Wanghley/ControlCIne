@@ -22,20 +22,20 @@ public class SessaoDAO {
 	public void add(Sessao ing) {
 
 		String sql = "INSERT INTO CONTROLCINE.SESSAO " +
-				"(HORARIO, DATA,ASSENTOSDISPONIVEIS, ESPECIAL, PRECOINGRESSO, IDFILME)" +
-				" values (?,?,?,?,?,?)";
+				"(ID, HORARIO, DATA,ASSENTOSDISPONIVEIS, ESPECIAL, PRECOINGRESSO, IDFILME)" +
+				" values (?,?,?,?,?,?,?)";
 
 		try {
 			// prepared statement para inserção
 			PreparedStatement stmt = conexao.prepareStatement(sql);
 
 			// seta os valores
-			stmt.setTime(1, ing.getHorario());
-			stmt.setDate(2, (Date) ing.getData());
-			stmt.setInt(3, ing.getAssentos());
-			stmt.setBoolean(4, ing.isIs3D());
-			stmt.setFloat(5, ing.getPreco());
-			stmt.setInt(6, ing.getId());
+			stmt.setTime(2, ing.getHorario());
+			stmt.setDate(3, (Date) ing.getData());
+			stmt.setInt(4, ing.getAssentos());
+			stmt.setBoolean(5, ing.isIs3D());
+			stmt.setFloat(6, ing.getPreco());
+			stmt.setInt(1, ing.getidSessao());
 
 			// executa
 			stmt.execute();
@@ -53,11 +53,10 @@ public class SessaoDAO {
 			PreparedStatement stmt = conexao.prepareStatement(sql);
 			ResultSet resultado = stmt.executeQuery(); //executa uma consulta
 			while(resultado.next()) {
-				tmpSessao = new Sessao(resultado.getInt("ID"),
-						resultado.getTime("HORARIO"), 
-						resultado.getDate("DATA"), resultado.getBoolean("ESPECIAL"),
-						resultado.getFloat("PRECOINGRESSO"), resultado.getInt("IDFILME"),
-						resultado.getInt("ASSENTOSDISPONIVEIS"));
+				tmpSessao = new Sessao(resultado.getInt("ID"), resultado.getTime("HORARIO"),
+						resultado.getDate("DATA"), resultado.getBoolean("ESPECIAL"), 
+						resultado.getFloat("PRECOINGRESSO"), resultado.getInt("idfilme"), 
+						resultado.getInt("idsala"),resultado.getInt("assentosdiponiveis"));
 				data.add(tmpSessao);
 			}
 			return data;
@@ -65,8 +64,7 @@ public class SessaoDAO {
 			ex.printStackTrace();
 		}
 		return null;
-	}
-	
+	}	
 	public List<Sessao> getAllBasedOnFilmeID(int idFilme) {
 		List<Sessao> data = new ArrayList<Sessao>();
 		Sessao tmpSessao = null;
@@ -78,7 +76,7 @@ public class SessaoDAO {
 				tmpSessao = new Sessao(resultado.getInt("ID"),
 						resultado.getTime("HORARIO"), 
 						resultado.getDate("DATA"), resultado.getBoolean("ESPECIAL"),
-						resultado.getFloat("PRECOINGRESSO"), resultado.getInt("IDFILME"),
+						resultado.getFloat("PRECOINGRESSO"), resultado.getInt("IDFILME"),resultado.getInt("IDSALA"),
 						resultado.getInt("ASSENTOSDISPONIVEIS"));
 				data.add(tmpSessao);
 			}

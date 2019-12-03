@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FuncionarioDAO {
 
@@ -76,7 +78,26 @@ public class FuncionarioDAO {
 			throw new RuntimeException(e);
 		}
 	}
-
+	
+	public List<Funcionario> getAllData() {
+		List<Funcionario> data = new ArrayList<Funcionario>();
+		Funcionario tmpSala = null;
+		String sql = "SELECT * FROM CONTROLCINE.SALA";
+		try {
+			PreparedStatement stmt = conexao.prepareStatement(sql);
+			ResultSet resultado = stmt.executeQuery(); //executa uma consulta
+			while(resultado.next()) {
+				tmpSala = new Funcionario(resultado.getString("CPF"), resultado.getString("NOME"), 
+						resultado.getBoolean("ADMIN"), resultado.getString("SENHA"));
+				data.add(tmpSala);
+			}
+			return data;
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		}
+		return null;
+	}
+	
 	//MÉTODO PARA EXIBIR TODOS
 	public void showAll() {
 		String sql = "select * from CONTROLCINE.FUNCIONARIO";

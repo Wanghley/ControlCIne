@@ -65,7 +65,7 @@ public class AdminPanelTeste extends JFrame {
 			imagePanel.add(panel);
 			panel.setLayout(null);
 			
-			JLabel lblSelecioneOQue = new JLabel("Salas");
+			JLabel lblSelecioneOQue = new JLabel("FUNCIONÁRIOS");
 			lblSelecioneOQue.setForeground(Color.WHITE);
 			lblSelecioneOQue.setHorizontalAlignment(SwingConstants.CENTER);
 			lblSelecioneOQue.setBounds(200, 12, 278, 15);

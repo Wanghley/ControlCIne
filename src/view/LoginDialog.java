@@ -19,13 +19,12 @@ import java.text.ParseException;
 import javax.swing.SwingConstants;
 import javax.swing.JFormattedTextField;
 import javax.swing.JPasswordField;
-import javax.swing.JTextField;
 
 public class LoginDialog extends JDialog {
 
+	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 	private JPasswordField pswd;
-	private static String[] userPswd = new String[2];
 	private JFormattedTextField ftxtCPF;
 	
 	public LoginDialog(UserData data) {
@@ -112,7 +111,7 @@ public class LoginDialog extends JDialog {
 					
 					@Override
 					public void actionPerformed(ActionEvent arg0) {	
-						data.setCPF(null);
+						data.setCPF("");
 						data.setPassword(null);
 						dispose();
 					}

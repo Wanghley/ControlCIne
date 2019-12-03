@@ -22,7 +22,6 @@ public class Filme {
 		this.capa=capa;
 	}
 	public Filme(int id) {
-		super();
 		this.id=id;
 	}
 	
