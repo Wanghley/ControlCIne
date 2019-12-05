@@ -124,7 +124,7 @@ public class Login extends JFrame {
 		LoginDialog ld = new LoginDialog(userPswd);
 		ld.setVisible(true);
 		FuncionarioDAO func = new FuncionarioDAO();
-		ResultSet r = func.getFuncionarioPerCPF(userPswd.getCPF());
+		ResultSet r = func.getFuncionarioPerCPFResultSet(userPswd.getCPF());
 		func.encerrar();
 		try {
 			if(!r.next()) {

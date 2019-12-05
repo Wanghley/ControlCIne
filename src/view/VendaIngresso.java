@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
@@ -25,9 +26,15 @@ import javax.swing.text.MaskFormatter;
 
 import model.Cliente;
 import model.ClienteDAO;
+import model.Compra;
+import model.CompraDAO;
 import model.FilmeDAO;
 import model.FilmeTableModel;
 import model.Funcionario;
+import model.Ingresso;
+import model.IngressoDAO;
+import model.Sala;
+import model.SalaDAO;
 import model.Sessao;
 import model.SessaoDAO;
 
@@ -55,9 +62,7 @@ public class VendaIngresso extends JFrame {
 	private JFormattedTextField ftxtCPF_1;
 	private List<Sessao> sessoes = new ArrayList<Sessao>();
 	private float preco = 0;
-	/**
-	 * Create the frame.
-	 */
+
 	public VendaIngresso(Funcionario func) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 740, 440);
@@ -238,7 +243,12 @@ public class VendaIngresso extends JFrame {
 					if(!chkBoxMeia.isSelected()) {
 						lblPreco.setText("R$"+preco);
 					}else {
-						lblPreco.setText("R$"+(preco/2));
+						if(!sessoes.get(index).isIs3D()) {
+							lblPreco.setText("R$"+(preco/2));
+						}else {
+							JOptionPane.showMessageDialog(rootPane, "Sessões 3D não possuem meia entrada!", "WARNING", JOptionPane.WARNING_MESSAGE);
+							chkBoxMeia.setSelected(false);
+						}
 					}
 					
 				}
@@ -256,6 +266,33 @@ public class VendaIngresso extends JFrame {
 					}else {
 						lblPreco.setText("R$"+(preco));
 					}
+				}
+			});
+			
+			btnConfirma.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					String cpf = ftxtCPF_1.getText();
+					String tmpCPF=null;
+					for (int i = 0; i < cpf.length(); i++) {
+						if(Character.isDigit(cpf.charAt(i))) {
+							if(i==0)
+								tmpCPF="";
+							tmpCPF+=cpf.charAt(i);
+							
+						}
+					}
+					cpf=tmpCPF;
+					Sessao sessaoSelecionada = sessoes.get(cbSessao.getSelectedIndex());
+					Random r = new Random();
+					Ingresso ing = new Ingresso(r.nextInt(), preco, (chkBoxMeia.isSelected())?true:false, cpf, sessaoSelecionada.getidSessao());
+					IngressoDAO iDAO = new IngressoDAO();
+					iDAO.add(ing);
+					Compra compra = new Compra(cpf, func.getCPF(), ing.getId());
+					CompraDAO compraDAO = new CompraDAO();
+					compraDAO.add(compra);
+					TicketOutput t = new TicketOutput(ing, compra, sessaoSelecionada);
+					t.setVisible(true);
 				}
 			});
 		} catch (ParseException e) {

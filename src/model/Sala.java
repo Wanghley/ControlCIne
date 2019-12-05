@@ -14,6 +14,10 @@ public class Sala extends Cinema{
 		this.id=id;
 		this.capacidade=capacidade;
 	}
+	public Sala(int capacidade,String CNPJ) {
+		super(CNPJ);
+		this.capacidade=capacidade;
+	}
 
 	public int getId() {
 		return id;

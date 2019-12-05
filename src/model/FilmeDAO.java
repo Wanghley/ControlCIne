@@ -41,6 +41,28 @@ public class FilmeDAO {
 			throw new RuntimeException(e);
 		}
 	}
+	
+	public void addWihoutID(Filme filme) {
+
+		String sql = "INSERT INTO CONTROLCINE.FILME " +
+				"(TITULO,DURACAO)" +
+				" values (?,?)";
+
+		try {
+			// prepared statement para inserção
+			PreparedStatement stmt = conexao.prepareStatement(sql);
+
+			// seta os valores
+			stmt.setString(1,filme.getTitulo());
+			stmt.setTime(2, filme.getDuracao());
+
+			// executa
+			stmt.execute();
+			stmt.close();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 	//MÉTODO PARA ALTERAR CONTATO
 	public void update(Filme filme) {
@@ -51,8 +73,8 @@ public class FilmeDAO {
 		try {
 			PreparedStatement stmt = conexao.prepareStatement(sql);
 			stmt.setString(1, filme.getTitulo());
-			stmt.setInt(2, filme.getId());
-			stmt.setTime(3, filme.getDuracao());
+			stmt.setInt(3, filme.getId());
+			stmt.setTime(2, filme.getDuracao());
 
 			System.out.println(stmt);
 
@@ -102,7 +124,7 @@ public class FilmeDAO {
 			PreparedStatement stmt = conexao.prepareStatement(sql);
 			ResultSet resultado = stmt.executeQuery(); //executa uma consulta
 			while(resultado.next()) {
-				tmpFilme = new Filme(resultado.getInt("ID"), resultado.getString("TITULO"), resultado.getTime("DURACAO"),
+				tmpFilme = new Filme(resultado.getInt("ID"), resultado.getString("TITULO"), resultado.getString("DURACAO"),
 						resultado.getBytes("CAPA"));
 				data.add(tmpFilme);
 			}

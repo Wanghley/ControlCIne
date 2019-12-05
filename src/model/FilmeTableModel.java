@@ -35,7 +35,7 @@ public class FilmeTableModel extends AbstractTableModel{
 		case 2:
 			return dados.get(row).getDuracao();
 		case 3:
-			return dados.get(row).getDuracao();
+			return dados.get(row).getCapa();
 		default:
 			return null;
 		}
@@ -43,9 +43,19 @@ public class FilmeTableModel extends AbstractTableModel{
 	
 	public void addRow(Filme filme) {
 		this.dados.add(filme);
+		this.fireTableDataChanged();
 	}
 	
 	public void addObject(List<Filme> filmes) {
 		this.dados.addAll(filmes);
+		this.fireTableDataChanged();
+	}
+	public void updateFilter() {
+		this.dados.clear();
+		this.fireTableDataChanged();
+		FilmeDAO dao = new FilmeDAO();
+		dados.addAll((dao.getAllData()));
+		dao.encerrar();
+		this.fireTableDataChanged();
 	}
 }

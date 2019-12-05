@@ -65,22 +65,25 @@ public class AdminPanelTeste extends JFrame {
 			imagePanel.add(panel);
 			panel.setLayout(null);
 			
-			JLabel lblSelecioneOQue = new JLabel("FUNCIONÁRIOS");
+			JLabel lblSelecioneOQue = new JLabel("SESSÃO");
 			lblSelecioneOQue.setForeground(Color.WHITE);
 			lblSelecioneOQue.setHorizontalAlignment(SwingConstants.CENTER);
 			lblSelecioneOQue.setBounds(200, 12, 278, 15);
 			panel.add(lblSelecioneOQue);
 			
-			JButton btnAdd = new JButton("ADICIONAR");
-			btnAdd.setBounds(200, 314, 121, 25);
+			JButton btnAdd = new JButton("");
+			btnAdd.setIcon(new ImageIcon(AdminPanelTeste.class.getResource("/img/btn_adicionar.jpg")));
+			btnAdd.setBounds(103, 294, 200, 45);
 			panel.add(btnAdd);
 			
-			JButton btnEdit = new JButton("EDITAR");
-			btnEdit.setBounds(358, 314, 114, 25);
+			JButton btnEdit = new JButton("");
+			btnEdit.setIcon(new ImageIcon(AdminPanelTeste.class.getResource("/img/btn_editar.jpg")));
+			btnEdit.setBounds(376, 294, 200, 45);
 			panel.add(btnEdit);
 			
-			JButton btnRemover = new JButton("REMOVER");
-			btnRemover.setBounds(515, 314, 114, 25);
+			JButton btnRemover = new JButton("");
+			btnRemover.setIcon(new ImageIcon(AdminPanelTeste.class.getResource("/img/btn_remove.jpg")));
+			btnRemover.setBounds(376, 237, 200, 45);
 			panel.add(btnRemover);
 			
 			JScrollPane scrollPane = new JScrollPane();
@@ -90,8 +93,9 @@ public class AdminPanelTeste extends JFrame {
 			table = new JTable();
 			scrollPane.setViewportView(table);
 			
-			JButton btnVoltar = new JButton("VOLTAR");
-			btnVoltar.setBounds(43, 314, 114, 25);
+			JButton btnVoltar = new JButton("");
+			btnVoltar.setIcon(new ImageIcon(AdminPanelTeste.class.getResource("/img/btn_voltar.jpg")));
+			btnVoltar.setBounds(103, 237, 200, 45);
 			panel.add(btnVoltar);
 		} catch (IOException e) {
 			System.err.println("ERROR! Background of Login not found!");

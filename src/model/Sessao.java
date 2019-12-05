@@ -40,8 +40,21 @@ public class Sessao{
 			stmt.setInt(1, idFilme);
 			FilmeData = stmt.executeQuery();
 			if (FilmeData.next()) {
-				filme = new Filme(FilmeData.getInt("ID"), FilmeData.getString("TITULO"), 
-						FilmeData.getTime("DURACAO"), null);
+				filme = new Filme(FilmeData.getInt("ID"), FilmeData.getString("TITULO"), FilmeData.getString("DURACAO"), null);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		String sql2 = "SELECT * FROM CONTROLCINE.SALA WHERE ID=?";
+		ResultSet SalaData = null;
+		this.conexao=c.getConexao();
+		try {
+			PreparedStatement stmt = conexao.prepareStatement(sql2);
+			stmt.setInt(1, idSala);
+			SalaData = stmt.executeQuery();
+			if (SalaData.next()) {
+				sala = new Sala(idSala, SalaData.getInt("CAPACIDADE"), SalaData.getString("CNPJ"));
 			}
 			stmt.close();
 			conexao.close();
@@ -49,6 +62,29 @@ public class Sessao{
 			e.printStackTrace();
 		}
 	}
+	public Filme getFilme() {
+		return filme;
+	}
+
+
+
+	public void setFilme(Filme filme) {
+		this.filme = filme;
+	}
+
+
+
+	public Sala getSala() {
+		return sala;
+	}
+
+
+
+	public void setSala(Sala sala) {
+		this.sala = sala;
+	}
+
+
 
 	public int getAssentos() {
 		return assentos;

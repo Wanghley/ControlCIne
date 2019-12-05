@@ -8,6 +8,8 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 public class SalaDAO {
 
 	// a conexão com o banco de dados
@@ -18,6 +20,52 @@ public class SalaDAO {
 		this.conexao = con.getConexao();
 	}
 
+	//MÉTODO PARA ADICIONAR NOVO CONTATO
+		public void add(Sala sal) {
+
+			String sql = "INSERT INTO CONTROLCINE.SALA " +
+					"(ID,CAPACIDADE,CNPJ)" +
+					" values (?,?,?)";
+
+			try {
+				// prepared statement para inserção
+				PreparedStatement stmt = conexao.prepareStatement(sql);
+
+				// seta os valores
+				stmt.setInt(1,sal.getId());
+				stmt.setInt(2,sal.getCapacidade());
+				stmt.setString(3,sal.getCNPJ());
+
+				// executa
+				stmt.execute();
+				stmt.close();
+			} catch (SQLException e) {
+				throw new RuntimeException(e);
+			}
+		}
+	
+		public void addWithoutID(Sala sal) {
+
+			String sql = "INSERT INTO CONTROLCINE.SALA " +
+					"(CAPACIDADE,CNPJ)" +
+					" values (?,?)";
+
+			try {
+				// prepared statement para inserção
+				PreparedStatement stmt = conexao.prepareStatement(sql);
+
+				// seta os valores
+				stmt.setInt(1,sal.getCapacidade());
+				stmt.setString(2,sal.getCNPJ());
+
+				// executa
+				stmt.execute();
+				stmt.close();
+			} catch (SQLException e) {
+				throw new RuntimeException(e);
+			}
+		}
+		
 	public List<Sala> getAllData() {
 		List<Sala> data = new ArrayList<Sala>();
 		Sala tmpSala = null;
@@ -55,7 +103,36 @@ public class SalaDAO {
 			throw new RuntimeException(e);
 		}
 	}
+	
+	public Sala getSala(int id) {
+		String sql = "SELECT * FROM CONTROLCINE.SALA WHERE ID=?";
+		Sala sal = null;
+		try {
+			PreparedStatement stmt = conexao.prepareStatement(sql);
+			stmt.setInt(1, id);
+			ResultSet rs = stmt.executeQuery();
+			if(rs.next()) {
+				sal = new Sala(id, rs.getInt("CAPACIDADE"), rs.getString("CNPJ"));
+			}
+			stmt.close();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+		return sal;
+	}
 
+	public void remove(Sala sal) {
+		try {
+			PreparedStatement stmt = conexao.prepareStatement("DELETE " +
+					"from CONTROLCINE.SALA where ID=?");
+			stmt.setInt(1, sal.getId());
+			stmt.execute();
+			stmt.close();
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, "Erro ao remover sala!", "ERROR", JOptionPane.ERROR_MESSAGE);
+		}
+	}
+	
 	//MÉTODO PARA BUSCAR QUALQUER CONSULTA
 	public ResultSet consult(String sql) {
 

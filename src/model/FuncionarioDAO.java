@@ -22,7 +22,7 @@ public class FuncionarioDAO {
 	public void add(Funcionario func) {
 
 		String sql = "INSERT INTO CONTROLCINE.FUNCIONARIO " +
-				"(CPF,NOME,ISADMIN,SENHA)" +
+				"(ID,NOME,ADMIN,SENHA)" +
 				" values (?,?,?,?)";
 
 		try {
@@ -34,7 +34,7 @@ public class FuncionarioDAO {
 			stmt.setString(2, func.getNome());
 			stmt.setBoolean(3, func.isAdmin());
 			stmt.setString(4, func.getPswd());
-			
+
 
 			// executa
 			stmt.execute();
@@ -48,7 +48,7 @@ public class FuncionarioDAO {
 	public void update(Funcionario func) {
 		System.out.println("ID: "+func.getCPF());
 
-		String sql = "UPDATE CONTROLCINE.FUNCIONARIO SET NOME=?, ISADMIN=?, SENHA=? " +
+		String sql = "UPDATE CONTROLCINE.FUNCIONARIO SET NOME=?, ADMIN=?, SENHA=? " +
 				"WHERE ID=?";
 		try {
 			PreparedStatement stmt = conexao.prepareStatement(sql);
@@ -78,16 +78,16 @@ public class FuncionarioDAO {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	public List<Funcionario> getAllData() {
 		List<Funcionario> data = new ArrayList<Funcionario>();
 		Funcionario tmpSala = null;
-		String sql = "SELECT * FROM CONTROLCINE.SALA";
+		String sql = "SELECT * FROM CONTROLCINE.FUNCIONARIO";
 		try {
 			PreparedStatement stmt = conexao.prepareStatement(sql);
 			ResultSet resultado = stmt.executeQuery(); //executa uma consulta
 			while(resultado.next()) {
-				tmpSala = new Funcionario(resultado.getString("CPF"), resultado.getString("NOME"), 
+				tmpSala = new Funcionario(resultado.getString("ID"), resultado.getString("NOME"), 
 						resultado.getBoolean("ADMIN"), resultado.getString("SENHA"));
 				data.add(tmpSala);
 			}
@@ -97,7 +97,7 @@ public class FuncionarioDAO {
 		}
 		return null;
 	}
-	
+
 	//MÉTODO PARA EXIBIR TODOS
 	public void showAll() {
 		String sql = "select * from CONTROLCINE.FUNCIONARIO";
@@ -115,8 +115,7 @@ public class FuncionarioDAO {
 
 	}
 
-	//MÉTODO PARA BUSCAR POR NOME
-	public ResultSet getFuncionarioPerCPF(String CPF) {
+	public ResultSet getFuncionarioPerCPFResultSet(String CPF) {
 
 		String sql = "SELECT * FROM CONTROLCINE.FUNCIONARIO WHERE ID=?";
 
@@ -126,6 +125,27 @@ public class FuncionarioDAO {
 
 			ResultSet resultado = stmt.executeQuery(); //executa uma consulta
 			return resultado;
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		}
+
+		return null;
+	}
+	
+	//MÉTODO PARA BUSCAR POR NOME
+	public Funcionario getFuncionarioPerCPFFunc(String CPF) {
+
+		String sql = "SELECT * FROM CONTROLCINE.FUNCIONARIO WHERE ID=?";
+
+		try {
+			PreparedStatement stmt = conexao.prepareStatement(sql);
+			stmt.setString(1,CPF);
+
+			ResultSet resultado = stmt.executeQuery(); //executa uma consulta
+			while(resultado.next()) {
+				Funcionario f = new Funcionario(resultado.getString("ID"), resultado.getString("NOME"), resultado.getBoolean("ADMIN"), resultado.getString("SENHA"));
+				return f;
+			}
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 		}

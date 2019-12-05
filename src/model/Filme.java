@@ -1,33 +1,50 @@
 package model;
 
 import java.sql.Time;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Filme {
 
 	private int id;
-	private Date duracao;
+	private Time duracao;
 	private String titulo;
 	private byte[] capa;
 
 	// métodos get e set para id, nome, email, endereço e dataNascimento
 
-	
 
-	public Filme(int id,  String titulo, Date duracao, byte[] capa) {
+
+	public Filme(int id,  String titulo, String duracao, byte[] capa) {
 		super();
 		this.id=id;
-		this.duracao=duracao;
+		DateFormat formato = new SimpleDateFormat("HH:mm:ss");
+		try {
+			this.duracao=new Time(formato.parse(duracao+":00").getTime());
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 		this.titulo=titulo;
 		this.capa=capa;
 	}
 	public Filme(int id) {
 		this.id=id;
 	}
-	
-	
-	
+
+
+
 	public Filme() {
+	}
+	public Filme(String titulo, String duracao) {
+		this.titulo=titulo;
+		DateFormat formato = new SimpleDateFormat("HH:mm:ss");
+		try {
+			this.duracao=new Time(formato.parse(duracao+":00").getTime());
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 	}
 	public byte[] getCapa() {
 		return capa;
@@ -50,8 +67,13 @@ public class Filme {
 		return (Time)duracao;
 	}
 
-	public void setDuracao(Date duracao) {
-		this.duracao = duracao;
+	public void setDuracao(String duracao) {
+		DateFormat formato = new SimpleDateFormat("HH:mm:ss");
+		try {
+			this.duracao=new Time(formato.parse(duracao+":00").getTime());
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public String getTitulo() {
@@ -67,9 +89,9 @@ public class Filme {
 		return "Filme [id=" + id + ", duracao=" + duracao + ", titulo=" + titulo + "]";
 	}
 
-	
 
-	
 
-	
+
+
+
 }

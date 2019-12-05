@@ -2,20 +2,22 @@ package model;
 
 public class Compra {
 
-	private int idCliente;
+	private String idCliente;
 	private String idFuncionario;
 	private int	idIngresso;
 	
-	public Compra(int idCliente, String idFuncionario,int idIngresso) {
+	public Compra(String idCliente, String idFuncionario,int idIngresso) {
 		this.idCliente=idCliente;
 		this.idFuncionario=idFuncionario;
 		this.idIngresso=idIngresso;
 	}
 	
-	public int getIdCliente() {
+	
+	
+	public String getIdCliente() {
 		return idCliente;
 	}
-	public void setIdCliente(int idCliente) {
+	public void setIdCliente(String idCliente) {
 		this.idCliente = idCliente;
 	}
 	public String getIdFuncionario() {

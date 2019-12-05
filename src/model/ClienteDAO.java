@@ -47,8 +47,6 @@ public class ClienteDAO {
 			stmt.setString(1, cliente.getNome());
 			stmt.setString(2, cliente.getCpf());
 
-			System.out.println(stmt);
-
 			stmt.execute();
 			stmt.close();
 		} catch (SQLException e) {
@@ -114,7 +112,6 @@ public class ClienteDAO {
 
 			ResultSet resultado = stmt.executeQuery(); //executa uma consulta
 			Cliente c = null;
-			System.out.println(cpf);
 			if(resultado.next()) {
 				c = new Cliente(resultado.getString("CPF"), resultado.getString("Nome"));
 			}

@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CompraDAO {
 
@@ -27,7 +29,7 @@ public class CompraDAO {
 			PreparedStatement stmt = conexao.prepareStatement(sql);
 
 			// seta os valores
-			stmt.setInt(1,compra.getIdCliente());
+			stmt.setString(1,compra.getIdCliente());
 			stmt.setString(2,compra.getIdFuncionario());
 			stmt.setInt(3,compra.getIdIngresso());
 
@@ -52,7 +54,25 @@ public class CompraDAO {
 			throw new RuntimeException(e);
 		}
 	}
-
+	
+	public List<Compra> getAllData() {
+		List<Compra> data = new ArrayList<Compra>();
+		Compra tmpSessao = null;
+		String sql = "select * from CONTROLCINE.COMPRA";
+		try {
+			PreparedStatement stmt = conexao.prepareStatement(sql);
+			ResultSet resultado = stmt.executeQuery(); //executa uma consulta
+			while(resultado.next()) {
+				tmpSessao = new Compra(resultado.getString("IDCLIENTE"), resultado.getString("IDFUNCIONARIO"), resultado.getInt("IDINGRESSO"));
+				data.add(tmpSessao);
+			}
+			return data;
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		}
+		return null;
+	}	
+	
 	//MÉTODO PARA EXIBIR TODOS
 	public void showAll() {
 		String sql = "select * from CONTROLCINE.COMPRA";

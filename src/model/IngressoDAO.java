@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 public class IngressoDAO {
 
@@ -20,16 +22,17 @@ public class IngressoDAO {
 	public void add(Ingresso ing) {
 
 		String sql = "INSERT INTO CONTROLCINE.INGRESSO " +
-				"(PRECO,MEIA)" +
-				" values (?,?)";
-
+				"(ID,MEIA,CPF_CLIENTE,ID_SESSAO)" +
+				" values (?,?,?,?)";
 		try {
 			// prepared statement para inserção
 			PreparedStatement stmt = conexao.prepareStatement(sql);
 
 			// seta os valores
-			stmt.setFloat(1, ing.getPreco());
+			stmt.setInt(4, ing.getIdSessao());
+			stmt.setString(3, ing.getCliente().getCpf());
 			stmt.setBoolean(2,ing.isMeia());
+			stmt.setInt(1, ing.getId());
 
 			// executa
 			stmt.execute();
@@ -43,13 +46,14 @@ public class IngressoDAO {
 	public void update(Ingresso ing) {
 		System.out.println("ID: "+ing.getId());
 
-		String sql = "UPDATE CONTROLCINE.INGRESSO SET PRECO=?, ISMEIA=? " +
+		String sql = "UPDATE CONTROLCINE.INGRESSO SET CPF_CLIENTE=?, ISMEIA=?, ID_SESSAO=?" +
 				"WHERE ID=?";
 		try {
 			PreparedStatement stmt = conexao.prepareStatement(sql);
-			stmt.setFloat(1, ing.getPreco());
+			stmt.setString(1, ing.getCliente().getCpf());
 			stmt.setBoolean(2, ing.isMeia());
-			stmt.setInt(3, ing.getId());
+			stmt.setInt(3, ing.getIdSessao());
+			stmt.setInt(4, ing.getId());
 
 			System.out.println(stmt);
 
@@ -91,24 +95,43 @@ public class IngressoDAO {
 	}
 
 	//MÉTODO PARA BUSCAR POR NOME
-	public ResultSet searchCinemaByName(int id) {
+	public ResultSet getIngressoByCPF(String CPF) {
 
-		String sql = "select * from CONTROLCINE.INGRESSO where ID like ?";
+		String sql = "select * from CONTROLCINE.INGRESSO where CPF = ?";
 
 		try {
 			PreparedStatement stmt = conexao.prepareStatement(sql);
-			stmt.setInt(1,id);
+			stmt.setString(1,CPF);
 
 			ResultSet resultado = stmt.executeQuery(); //executa uma consulta
 			return resultado;
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+			return null;
+		}
+	}
+	
+	public Ingresso getIngressoByID(int ID) {
+
+		String sql = "select * from CONTROLCINE.INGRESSO where ID = ?";
+
+		try {
+			PreparedStatement stmt = conexao.prepareStatement(sql);
+			stmt.setInt(1,ID);
+
+			ResultSet resultado = stmt.executeQuery(); //executa uma consulta
+			//Ingresso i = new Ingresso(resultado.getInt("ID"), resultado.getFloat("PRECO"), resultado.getBoolean("MEIA"), resultado.getString("CPF_CLIENTE"), resultado.getInt("ID_CLIENTE"));
+			while(resultado.next()) {
+				Ingresso i = new Ingresso(resultado.getInt("ID"), 0.0f, resultado.getBoolean("MEIA"), resultado.getString("CPF_CLIENTE"), resultado.getInt("ID_SESSAO"));
+				return i;
+			}
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 		}
 
 		return null;
 	}
-
-
+	
 	//MÉTODO PARA BUSCAR QUALQUER CONSULTA
 	public ResultSet consult(String sql) {
 
@@ -131,5 +154,24 @@ public class IngressoDAO {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	public List<Ingresso> getAllData() {
+		List<Ingresso> data = new ArrayList<Ingresso>();
+		Ingresso tmpSala = null;
+		String sql = "SELECT * FROM CONTROLCINE.FUNCIONARIO";
+		try {
+			PreparedStatement stmt = conexao.prepareStatement(sql);
+			ResultSet resultado = stmt.executeQuery(); //executa uma consulta
+			while(resultado.next()) {
+				//resultado.getInt("ID"), resultado.getFloat("PRECO"), resultado.getBoolean("MEIA"), resultado.getString("CPF_CLIENTE"), resultado.getString("ID_SESSAO")
+				tmpSala = new Ingresso(resultado.getInt("ID"), resultado.getFloat("PRECO"), resultado.getBoolean("MEIA"), resultado.getString("CPF_CLIENTE"), resultado.getInt("ID_SESSAO"));
+				data.add(tmpSala);
+			}
+			return data;
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		}
+		return null;
 	}
 }

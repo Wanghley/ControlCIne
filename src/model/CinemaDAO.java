@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CinemaDAO {
 
@@ -106,6 +108,25 @@ public class CinemaDAO {
 			ex.printStackTrace();
 		}
 
+		return null;
+	}
+	
+	public List<Cinema> getAllData() {
+		List<Cinema> data = new ArrayList<Cinema>();
+		Cinema tmpCinema = null;
+		String sql = "select * from CONTROLCINE.CINEMA";
+		try {
+			PreparedStatement stmt = conexao.prepareStatement(sql);
+			ResultSet resultado = stmt.executeQuery(); //executa uma consulta
+			while(resultado.next()) {
+				tmpCinema = new Cinema(resultado.getString("CNPJ"), resultado.getString("NOME"), 
+						resultado.getString("FRANQUIA"));
+				data.add(tmpCinema);
+			}
+			return data;
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		}
 		return null;
 	}
 	
